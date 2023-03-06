@@ -1,0 +1,47 @@
+module T_ff_tb();
+reg T,clk,Rst;
+wire Q,Qb;
+T_ff t1(T,clk,Rst,Q,Qb);
+always
+ begin
+     clk <= 0;
+     #5;
+     clk <=1;
+     #5;
+ end
+ 
+task initialize;
+  begin
+      T<=0;
+      Rst<=0;
+  end
+endtask
+
+
+task Rst_tsk(input a);
+    begin 
+       @(negedge clk):
+       Rst <= a;
+    end
+endtask
+
+task T_ff_tsk(input b);
+    begin
+        @(negedge clk):
+        T <= b;
+    end
+endtask
+
+initial 
+begin
+    initialize;
+Rst_tsk(1);
+#40;
+Rst_tsk(0);
+T_ff_tsk(1);
+#10;
+T_ff_tsk(0);
+#10;
+
+end
+endmodule
